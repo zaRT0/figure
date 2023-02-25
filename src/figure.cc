@@ -19,3 +19,15 @@ double Figure::calc_perimetr(double x1, double x2, double x3, double x4, double 
 		else { return 0; }
 	}
 }
+
+double Figure::calc_square(double x1, double x2, double x3, double x4, double y1, double y2, double y3, double y4) {
+	switch (type) {
+	case CIRCLE: return round((PI * pow(calc_length(x1, x2, y1, y2), 2)) * 10000) / 10000;
+	case RECTANGLE:
+		if ((y1 == y2) && (x1 == x4) && (y3 == y4) && (x2 == x3)) { return round((calc_length(x1, x2, y1, y2) * calc_length(x2, x3, y2, y3)) * 10000) / 10000; }
+		else { return 0; }
+	case TRIANGLE:
+		double p = (calc_length(x1, x2, y1, y2) + calc_length(x2, x3, y2, y3) + calc_length(x1, x3, y1, y3)) / 2;
+		return round((sqrt(p * (p - calc_length(x1, x2, y1, y2)) * (p - calc_length(x2, x3, y2, y3)) * (p - calc_length(x1, x3, y1, y3))) * 10000)) / 10000;
+	}
+}
