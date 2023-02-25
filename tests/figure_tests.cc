@@ -54,3 +54,18 @@ TEST(FunctionsTests, CalcSquareTest3) {
     // Assert
     EXPECT_EQ(r, 6);
 }
+
+TEST(FunctionsTests, MinSquare1) {
+    // Arrange
+    Figure circle(FigureType::CIRCLE);
+    Figure triangle(FigureType::TRIANGLE);
+    Figure rectangle(FigureType::RECTANGLE);
+    Figure result(0, 0, 0);
+    // Act
+    double r1 = circle.calc_square(4, 6, 0, 0, 5, 3, 0, 0);
+    double r2 = rectangle.calc_square(2, 6, 6, 2, 7, 7, 4, 4);
+    double r3 = triangle.calc_square(5, 7, 3, 0, 8, 6, 4, 0);
+    double r4 = result.min_square(r1, r2, r3);
+    // Assert
+    EXPECT_EQ(r4, 2);
+}
