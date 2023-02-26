@@ -55,6 +55,33 @@ TEST(FunctionsTests, CalcSquareTest3) {
     EXPECT_EQ(r, 6);
 }
 
+TEST(FunctionsTests, FramingRectangle1) {
+    // Arrange
+    Figure circle(FigureType::CIRCLE);
+    // Act
+    double r = circle.calc_framing_rectangle(4, 6, 0, 0, 5, 3, 0, 0);
+    // Assert
+    EXPECT_EQ(r, 32);
+}
+
+TEST(FunctionsTests, FramingRectangle2) {
+    // Arrange
+    Figure rectangle(FigureType::RECTANGLE);
+    // Act
+    double r = rectangle.calc_framing_rectangle(2, 6, 6, 2, 7, 7, 4, 4);
+    // Assert
+    EXPECT_EQ(r, 12);
+}
+
+TEST(FunctionsTests, FramingRectangle3) {
+    // Arrange
+    Figure triangle(FigureType::TRIANGLE);
+    // Act
+    double r = triangle.calc_framing_rectangle(5, 7, 3, 0, 8, 6, 4, 0);
+    // Assert
+    EXPECT_EQ(r, 12);
+}
+
 TEST(FunctionsTests, MinSquare1) {
     // Arrange
     Figure circle(FigureType::CIRCLE);
@@ -69,3 +96,4 @@ TEST(FunctionsTests, MinSquare1) {
     // Assert
     EXPECT_EQ(r4, 2);
 }
+
