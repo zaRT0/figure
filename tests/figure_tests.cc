@@ -1,99 +1,110 @@
 #include <gtest/gtest.h>
 #include <figure/figure.h>
-
+using namespace Figures;
 TEST(FigureTests, CalcPerimetrTest1) {
     // Arrange
-    Figure circle(FigureType::CIRCLE);
+    Point p1(4, 5);
+    Point p2(6, 3);
+    Figure circle(FigureType::CIRCLE, p1, p2);
     // Act
-    double r = circle.calc_perimetr(4, 6, 0, 0, 5, 3, 0, 0);
+    double r = circle.calc_perimetr();
     // Assert
     EXPECT_EQ(r, 17.7625);
 }
 
 TEST(FunctionsTests, CalcPerimetrTest2) {
     // Arrange
-    Figure triangle(FigureType::TRIANGLE);
+    Point p1(4, 5);
+    Point p2(6, 3);
+    Point p3(5, 8);
+    Figure triangle(FigureType::TRIANGLE, p1, p2, p3);
     // Act
-    double r = triangle.calc_perimetr(5, 7, 3, 0, 8, 6, 4, 0);
+    double r = triangle.calc_perimetr();
     // Assert
-    EXPECT_EQ(r, 11.7727);
+    EXPECT_EQ(r, 11.0897);
 }
 
 TEST(FunctionsTests, CalcPerimetrTest3) {
     // Arrange
-    Figure rectangle(FigureType::RECTANGLE);
+    Point p1(4, 5);
+    Point p2(6, 5);
+    Point p3(1, 8);
+    Point p4(1, 4);
+    Figure rectangle(FigureType::RECTANGLE, p1, p2, p3,p4);
     // Act
-    double r = rectangle.calc_perimetr(2, 6, 6, 2, 7, 7, 4, 4);
+    double r = rectangle.calc_perimetr();
     // Assert
-    EXPECT_EQ(r, 14);
+    EXPECT_EQ(r, 0);
 }
 
 TEST(FunctionsTests, CalcSquareTest1) {
     // Arrange
-    Figure circle(FigureType::CIRCLE);
+    Point p1(1, 8);
+    Point p2(3, 7);
+    Figure circle(FigureType::CIRCLE, p1, p2);
     // Act
-    double r = circle.calc_square(4, 6, 0, 0, 5, 3, 0, 0);
+    double r = circle.calc_square();
     // Assert
-    EXPECT_EQ(r, 25.12);
+    EXPECT_EQ(r, 15.7);
 }
 
 TEST(FunctionsTests, CalcSquareTest2) {
     // Arrange
-    Figure rectangle(FigureType::RECTANGLE);
+    Point p1(3, 9);
+    Point p2(4, 9);
+    Point p3(4, 7);
+    Point p4(3, 7);
+    Figure rectangle(FigureType::RECTANGLE, p1, p2, p3, p4);
     // Act
-    double r = rectangle.calc_square(2, 6, 6, 2, 7, 7, 4, 4);
+    double r = rectangle.calc_square();
     // Assert
-    EXPECT_EQ(r, 12);
+    EXPECT_EQ(r, 2);
 }
 
 TEST(FunctionsTests, CalcSquareTest3) {
     // Arrange
-    Figure triangle(FigureType::TRIANGLE);
+    Point p1(1, 5);
+    Point p2(6, 3);
+    Point p3(5, 7);
+    Figure triangle(FigureType::TRIANGLE, p1, p2, p3);
     // Act
-    double r = triangle.calc_square(5, 7, 3, 0, 8, 6, 4, 0);
+    double r = triangle.calc_square();
     // Assert
-    EXPECT_EQ(r, 6);
+    EXPECT_EQ(r, 9);
 }
 
 TEST(FunctionsTests, FramingRectangle1) {
     // Arrange
-    Figure circle(FigureType::CIRCLE);
+    Point p1(1, 4);
+    Point p2(7, 3);
+    Figure circle(FigureType::CIRCLE, p1, p2);
     // Act
-    double r = circle.calc_framing_rectangle(4, 6, 0, 0, 5, 3, 0, 0);
+    double r = circle.calc_framing_rectangle();
     // Assert
-    EXPECT_EQ(r, 32);
+    EXPECT_EQ(r, 148);
 }
 
 TEST(FunctionsTests, FramingRectangle2) {
     // Arrange
-    Figure rectangle(FigureType::RECTANGLE);
+    Point p1(1, 5);
+    Point p2(4, 3);
+    Point p3(5, 7);
+    Point p4(1, 3);
+    Figure rectangle(FigureType::RECTANGLE, p1, p2, p3, p4);
     // Act
-    double r = rectangle.calc_framing_rectangle(2, 6, 6, 2, 7, 7, 4, 4);
+    double r = rectangle.calc_framing_rectangle();
     // Assert
-    EXPECT_EQ(r, 12);
+    EXPECT_EQ(r, 14);
 }
 
 TEST(FunctionsTests, FramingRectangle3) {
     // Arrange
-    Figure triangle(FigureType::TRIANGLE);
+    Point p1(1, 5);
+    Point p2(4, 3);
+    Point p3(2, 6);
+    Figure triangle(FigureType::TRIANGLE, p1, p2, p3);
     // Act
-    double r = triangle.calc_framing_rectangle(5, 7, 3, 0, 8, 6, 4, 0);
+    double r = triangle.calc_framing_rectangle();
     // Assert
-    EXPECT_EQ(r, 12);
+    EXPECT_EQ(r, 5);
 }
-
-TEST(FunctionsTests, MinSquare1) {
-    // Arrange
-    Figure circle(FigureType::CIRCLE);
-    Figure triangle(FigureType::TRIANGLE);
-    Figure rectangle(FigureType::RECTANGLE);
-    Figure result(0, 0, 0);
-    // Act
-    double r1 = circle.calc_square(4, 6, 0, 0, 5, 3, 0, 0);
-    double r2 = rectangle.calc_square(2, 6, 6, 2, 7, 7, 4, 4);
-    double r3 = triangle.calc_square(5, 7, 3, 0, 8, 6, 4, 0);
-    double r4 = result.min_square(r1, r2, r3);
-    // Assert
-    EXPECT_EQ(r4, 2);
-}
-
