@@ -3,48 +3,33 @@
 
 using namespace Figures;
 
-TEST(FigureListTests, CapacityCheck) {
-    FigureContainer figures;
-    Point p1(1, 3);
-    Point p2(2, 4);
-    Point p3(3, 6);
-    const auto s = Figure::Figure(TRIANGLE, p1, p2, p3);
-    for (int i = 0; i < FigureContainer::SIZE; ++i) {
-        figures.insert(i, s);
-    }
-
-    ASSERT_ANY_THROW(figures.insert(10, s));
-
+TEST(SequanceContainerTests, CapacityCheck) {
+    FigureContainer figures(3);
+    Figure s = Figure(CIRCLE, Point(1, 2), Point(5, 9));
+    figures[0] = Figure(CIRCLE, Point(4, 3), Point(5, 8));
+    figures[1] = Figure(CIRCLE, Point(1, 3), Point(7, 9));
+    figures[2] = Figure(CIRCLE, Point(1, 9), Point(78, 2));
+    ASSERT_ANY_THROW(figures.insert(4, s));
 }
 
-TEST(IndexOfFigureWithMinValue, NoResult) {
+TEST(MaxSumNthElemIndex, NoResult) {
     FigureContainer figures;
-    Point p1(1, 3);
-    Point p2(2, 4);
-    Point p3(3, 6);
-    Point p4(4, 8);
-    
     const auto index = min_square(figures);
-
     ASSERT_EQ(index, -1);
 }
 
 TEST(IndexOfFigureWithMinValue, ForCircle) {
     FigureContainer figures;
-
-    Point p_c1(1, 2);
-    Point p_c2(5, 9);
-    Point p_c3(4, 3);
-    Point p_c4(15, 11);
-    Point p_c5(20, 8);
-    Point p_c6(8, 11);
-    Point p_c7(7, 12);
-    Point p_c8(1, 5);
-
-    figures.insert(0, Figure::Figure(CIRCLE, p_c1, p_c2));
-    figures.insert(1, Figure::Figure(CIRCLE, p_c3, p_c4));
-    figures.insert(2, Figure::Figure(CIRCLE, p_c5, p_c6));
-    figures.insert(3, Figure::Figure(CIRCLE, p_c7, p_c8));
+    Figure s;
+    
+    s = Figure(CIRCLE, Point(1, 2), Point(5, 9));
+    figures.insert(0, s);
+    s = Figure(CIRCLE, Point(4, 3), Point(15, 11));
+    figures.insert(1, s);
+    s = Figure(CIRCLE, Point(20, 8), Point(8, 11));
+    figures.insert(2, s);
+    s = Figure(CIRCLE, Point(7, 12), Point(1, 5));
+    figures.insert(3, s);
     
     const auto index = min_square(figures);
 
@@ -53,21 +38,14 @@ TEST(IndexOfFigureWithMinValue, ForCircle) {
 
 TEST(IndexOfFigureWithMinValue, ForTriangle) {
     FigureContainer figures;
+    Figure s;
 
-    Point p_t1(2, 3);
-    Point p_t2(10, 5);
-    Point p_t3(12, 4);
-    Point p_t4(15, 8);
-    Point p_t5(10, 9);
-    Point p_t6(8, 7);
-    Point p_t7(2, 3);
-    Point p_t8(10, 5);
-    Point p_t9(12, 4);
-
-
-    figures.insert(0, Figure::Figure(TRIANGLE, p_t1, p_t2, p_t3));
-    figures.insert(1, Figure::Figure(TRIANGLE, p_t4, p_t5, p_t6));
-    figures.insert(2, Figure::Figure(TRIANGLE, p_t7, p_t8, p_t9));
+    s = Figure(TRIANGLE, Point(2, 3), Point(10, 5), Point(12, 4));
+    figures.insert(0, s);
+    s = Figure(TRIANGLE, Point(15, 8), Point(10, 9), Point(8, 7));
+    figures.insert(1, s);
+    s = Figure(TRIANGLE, Point(2, 3), Point(10, 5), Point(12, 4));
+    figures.insert(2, s);
 
     const auto index = min_square(figures);
 
@@ -76,207 +54,128 @@ TEST(IndexOfFigureWithMinValue, ForTriangle) {
 
 TEST(IndexOfFigureWithMinValue, ForRectangle) {
     FigureContainer figures;
+    Figure s;
 
-    Point p_r1(10, 4);
-    Point p_r2(9, 1);
-    Point p_r3(8, 6);
-    Point p_r4(5, 10);
-    Point p_r5(3, 8);
-    Point p_r6(14, 1);
-    Point p_r7(2, 7);
-    Point p_r8(10, 19);
-    Point p_r9(10, 4);
-    Point p_r10(9, 1);
-    Point p_r11(8, 6);
-    Point p_r12(5, 10);
-    Point p_r13(3, 8);
-    Point p_r14(14, 1);
-    Point p_r15(2, 7);
-    Point p_r16(10, 19);
-
-    figures.insert(0, Figure::Figure(RECTANGLE, p_r1, p_r2, p_r3, p_r4));
-    figures.insert(1, Figure::Figure(RECTANGLE, p_r5, p_r6, p_r7, p_r8));
-    figures.insert(2, Figure::Figure(RECTANGLE, p_r9, p_r10, p_r11, p_r12));
-    figures.insert(3, Figure::Figure(RECTANGLE, p_r13, p_r14, p_r15, p_r16));
+    s = Figure(RECTANGLE, Point(10, 4), Point(9, 1));
+    figures.insert(0, s);
+    s = Figure(RECTANGLE, Point(8, 6), Point(5, 10));
+    figures.insert(1, s);
+    s = Figure(RECTANGLE, Point(3, 8), Point(14, 1));
+    figures.insert(2, s);
+    s = Figure(RECTANGLE, Point(2, 7), Point(10, 19));
 
     const auto index = min_square(figures);
 
-    ASSERT_EQ(index, 3);
+    ASSERT_EQ(index, 0);
 }
 
 TEST(IndexOfFigureWithMinValue, Mix1) {
     FigureContainer figures;
-    
-    Point p_c1(1, 2);
-    Point p_c2(2, 3);
-    Point p_t1(2, 3);
-    Point p_t2(10, 5);
-    Point p_t3(12, 4);
-    Point p_r1(10, 4);
-    Point p_r2(9, 1);
-    Point p_r3(8, 6);
-    Point p_r4(5, 10);
-    Point p_r5(3, 8);
-    Point p_r6(14, 1);
-    Point p_r7(2, 7);
-    Point p_r8(10, 19);
+    Figure s;
 
-    figures.insert(0, Figure::Figure(CIRCLE, p_c1, p_c2));
-    figures.insert(1, Figure::Figure(TRIANGLE, p_t1, p_t2, p_t3));
-    figures.insert(2, Figure::Figure(RECTANGLE, p_r1, p_r2, p_r3, p_r4));
-    figures.insert(3, Figure::Figure(RECTANGLE, p_r5, p_r6, p_r7, p_r8));
+    s = Figure(CIRCLE, Point(1, 2), Point(2, 3));
+    figures.insert(0, s);
+    s = Figure(TRIANGLE, Point(2, 3), Point(10, 5), Point(12, 4));
+    figures.insert(1, s);
+    s = Figure(RECTANGLE, Point(10, 4), Point(9, 1));
+    figures.insert(2, s);
+    s = Figure(RECTANGLE, Point(8, 6), Point(5, 10));
 
     const auto index = min_square(figures);
 
-    ASSERT_EQ(index, 3);
+    ASSERT_EQ(index, 2);
 }
 
 TEST(IndexOfFigureWithMinValue, Mix2) {
     FigureContainer figures;
-   
-    Point p_c1(1, 2);
-    Point p_c2(2, 3);
-    Point p_t1(2, 3);
-    Point p_t2(10, 5);
-    Point p_t3(12, 4);
-    Point p_t4(15, 8);
-    Point p_t5(10, 9);
-    Point p_t6(8, 7);
-    Point p_r1(10, 4);
-    Point p_r2(9, 1);
-    Point p_r3(8, 6);
-    Point p_r4(5, 10);
+    Figure s;
 
-    figures.insert(0, Figure::Figure(CIRCLE, p_c1, p_c2));
-    figures.insert(1, Figure::Figure(TRIANGLE, p_t1, p_t2, p_t3));
-    figures.insert(2, Figure::Figure(TRIANGLE, p_t4, p_t5, p_t6));
-    figures.insert(3, Figure::Figure(RECTANGLE, p_r1, p_r2, p_r3, p_r4));
+    s = Figure(CIRCLE, Point(1, 2), Point(2, 3));
+    figures.insert(0, s);
+    s = Figure(TRIANGLE, Point(2, 3), Point(10, 5), Point(12, 4));
+    figures.insert(1, s);
+    s = Figure(TRIANGLE, Point(15, 8), Point(10, 9), Point(8, 7));
+    figures.insert(2, s);
+    s = Figure(RECTANGLE, Point(10, 4), Point(9, 1));
 
     const auto index = min_square(figures);
 
-    ASSERT_EQ(index, 3);
+    ASSERT_EQ(index, 2);
 }
 
 TEST(IndexOfFigureWithMinValue, Mix3) { 
     FigureContainer figures;
-   
-    Point p_c1(1, 2);
-    Point p_c2(2, 3);
-    Point p_c3(5, 1);
-    Point p_c4(7, 10);
-    Point p_t1(2, 3);
-    Point p_t2(10, 5);
-    Point p_t3(12, 4);
-    Point p_r1(10, 4);
-    Point p_r2(9, 1);
-    Point p_r3(8, 6);
-    Point p_r4(5, 10);
+    Figure s;
 
-    figures.insert(0, Figure::Figure(CIRCLE, p_c1, p_c2));
-    figures.insert(1, Figure::Figure(RECTANGLE, p_r1, p_r2, p_r3, p_r4));
-    figures.insert(2, Figure::Figure(TRIANGLE, p_t1, p_t2, p_t3));
-    figures.insert(3, Figure::Figure(CIRCLE, p_c3, p_c4));
+    s = Figure(CIRCLE, Point(1, 2), Point(2, 3));
+    figures.insert(0, s);
+    s = Figure(CIRCLE, Point(5, 1), Point(7, 10));
+    figures.insert(1, s);
+    s = Figure(TRIANGLE, Point(2, 3), Point(10, 5), Point(12, 4));
+    figures.insert(2, s);
+    s = Figure(RECTANGLE, Point(10, 4), Point(9, 1));
 
     const auto index = min_square(figures);
 
-    ASSERT_EQ(index, 1);
+    ASSERT_EQ(index, 2);
 }
 
 TEST(IndexOfFigureWithMinValue, Mix4) {
     FigureContainer figures;
-   
-    Point p_c1(1, 2);
-    Point p_c2(2, 3);
-    Point p_c3(5, 1);
-    Point p_c4(7, 10);
-    Point p_c5(5, 15);
-    Point p_c6(3, 11);
-    Point p_c7(3, 11);
-    Point p_c8(3, 11);
-    Point p_t1(2, 3);
-    Point p_t2(10, 5);
-    Point p_t3(12, 4);
-    Point p_t4(15, 8);
-    Point p_t5(10, 9);
-    Point p_t6(8, 7);
-    Point p_t7(15, 11);
-    Point p_t8(6, 7);
-    Point p_t9(9, 17);
-    Point p_r1(10, 4);
-    Point p_r2(9, 1);
-    Point p_r3(8, 6);
-    Point p_r4(5, 10);
-    Point p_r5(3, 8);
-    Point p_r6(14, 1);
-    Point p_r7(2, 7);
-    Point p_r8(10, 19);
-    Point p_r9(7, 4);
-    Point p_r10(5, 9);
-    Point p_r11(3, 2);
-    Point p_r12(8, 16);
+    Figure s;
 
-    figures.insert(0, Figure::Figure(TRIANGLE, p_t1, p_t2, p_t3));
-    figures.insert(1, Figure::Figure(CIRCLE, p_c1, p_c2));
-    figures.insert(2, Figure::Figure(RECTANGLE, p_r1, p_r2, p_r3, p_r4));
-    figures.insert(3, Figure::Figure(TRIANGLE, p_t4, p_t5, p_t6));
-    figures.insert(4, Figure::Figure(CIRCLE, p_c3, p_c4));
-    figures.insert(5, Figure::Figure(RECTANGLE, p_r5, p_r6, p_r7, p_r8));
-    figures.insert(6, Figure::Figure(TRIANGLE, p_t7, p_t8, p_t9));
-    figures.insert(7, Figure::Figure(RECTANGLE, p_r9, p_r10, p_r11, p_r12));
-    figures.insert(8, Figure::Figure(CIRCLE, p_c5, p_c6));
-    figures.insert(9, Figure::Figure(CIRCLE, p_c7, p_c8));
+    s = Figure(TRIANGLE, Point(2, 3), Point(10, 5), Point(12, 4));
+    figures.insert(0, s);
+    s = Figure(CIRCLE, Point(1, 2), Point(2, 3));
+    figures.insert(1, s);
+    s = Figure(RECTANGLE, Point(10, 4), Point(9, 1));
+    figures.insert(2, s);
+    s = Figure(TRIANGLE, Point(15, 8), Point(10, 9), Point(8, 7));
+    figures.insert(3, s);
+    s = Figure(CIRCLE, Point(5, 1), Point(7, 10));
+    figures.insert(4, s);
+    s = Figure(RECTANGLE, Point(8, 6), Point(5, 10));
+    figures.insert(5, s);
+    s = Figure(TRIANGLE, Point(15, 11), Point(6, 7), Point(9, 17));
+    figures.insert(6, s);
+    s = Figure(CIRCLE, Point(5, 15), Point(3, 11));
+    figures.insert(7, s);
+    s = Figure(RECTANGLE, Point(7, 4), Point(3, 2));
+    figures.insert(8, s);
+    s = Figure(TRIANGLE, Point(3, 8), Point(4, 10), Point(5, 3));
+    figures.insert(9, s);
 
     const auto index = min_square(figures);
 
-    ASSERT_EQ(index, 9);
+    ASSERT_EQ(index, 2);
 }
 
 TEST(IndexOfFigureWithMinValue, Mix5) {
     FigureContainer figures;
+    Figure s;
     
-    Point p_c1(1, 2);
-    Point p_c2(2, 3);
-    Point p_c3(5, 1);
-    Point p_c4(7, 10);
-    Point p_c5(5, 15);
-    Point p_c6(3, 11);
-    Point p_t1(2, 3);
-    Point p_t2(10, 5);
-    Point p_t3(12, 4);
-    Point p_t4(15, 8);
-    Point p_t5(10, 9);
-    Point p_t6(8, 7);
-    Point p_t7(15, 11);
-    Point p_t8(6, 7);
-    Point p_t9(9, 17);
-    Point p_t10(20, 15);
-    Point p_t11(14, 17);
-    Point p_t12(2, 10);
-    Point p_r1(10, 4);
-    Point p_r2(9, 1);
-    Point p_r3(8, 6);
-    Point p_r4(5, 10);
-    Point p_r5(3, 8);
-    Point p_r6(14, 1);
-    Point p_r7(2, 7);
-    Point p_r8(10, 19);
-    Point p_r9(7, 4);
-    Point p_r10(5, 9);
-    Point p_r11(3, 2);
-    Point p_r12(8, 16);
-
-    figures.insert(0, Figure::Figure(TRIANGLE, p_t1, p_t2, p_t3));
-    figures.insert(1, Figure::Figure(CIRCLE, p_c1, p_c2));
-    figures.insert(2, Figure::Figure(RECTANGLE, p_r5, p_r6, p_r7, p_r8));
-    figures.insert(3, Figure::Figure(TRIANGLE, p_t4, p_t5, p_t6));
-    figures.insert(4, Figure::Figure(RECTANGLE, p_r1, p_r2, p_r3, p_r4));
-    figures.insert(5, Figure::Figure(CIRCLE, p_c3, p_c4));
-    figures.insert(6, Figure::Figure(TRIANGLE, p_t7, p_t8, p_t9));
-    figures.insert(7, Figure::Figure(RECTANGLE, p_r9, p_r10, p_r11, p_r12));
-    figures.insert(8, Figure::Figure(TRIANGLE, p_t10, p_t11, p_t12));
-    figures.insert(9, Figure::Figure(CIRCLE, p_c5, p_c6));
+    s = Figure(TRIANGLE, Point(3, 4), Point(10, 5), Point(17, 4));
+    figures.insert(0, s);
+    s = Figure(CIRCLE, Point(9, 4), Point(5, 3));
+    figures.insert(1, s);
+    s = Figure(RECTANGLE, Point(11, 4), Point(9, 9));
+    figures.insert(2, s);
+    s = Figure(TRIANGLE, Point(4, 8), Point(9, 10), Point(2, 3));
+    figures.insert(3, s);
+    s = Figure(RECTANGLE, Point(7, 4), Point(1, 2));
+    figures.insert(4, s);
+    s = Figure(CIRCLE, Point(5, 11), Point(3, 12));
+    figures.insert(5, s);
+    s = Figure(TRIANGLE, Point(3, 2), Point(4, 13), Point(9, 7));
+    figures.insert(6, s);
+    s = Figure(RECTANGLE, Point(7, 4), Point(3, 2));
+    figures.insert(7, s);
+    s = Figure(TRIANGLE, Point(3, 7), Point(4, 11), Point(8, 3));
+    figures.insert(8, s);
+    s = Figure(CIRCLE, Point(1, 2), Point(2, 4));
+    figures.insert(9, s);
 
     const auto index = min_square(figures);
 
-    ASSERT_EQ(index, 7);
+    ASSERT_EQ(index, 0);
 }

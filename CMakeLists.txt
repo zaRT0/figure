@@ -27,7 +27,14 @@ FetchContent_Declare(googletest URL https://github.com/google/googletest/archive
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+add_executable(Console 
+            "Console/Console.cc" 
+            "include/figure/figure.h")
+target_link_libraries(Console PRIVATE figure)
+
 # Объявляем тесты
 add_executable(figure_tests "tests/figure_tests.cc" "tests/figure_container_test.cc")
 target_link_libraries(figure_tests figure GTest::gtest_main)
+
+
 
