@@ -21,7 +21,32 @@ void print_arr(FigureContainer& arr) {
     }
     for (int i = 0; i < arr.get_size(); ++i) {
         cout << "[" << i << "]" << endl;
-        cout << arr[i];
+        arr[i].calc_framing_rectangle();
+        Point* points_arr = arr[i].get_points_framing_rectangle();
+        if (arr[i].get_type() == CIRCLE) {
+            cout << "  |Тип: " << "CIRCLE" << "|\n";
+            cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
+            cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
+            cout << "  |Третья точка: " << "X - " << points_arr[2].x << " Y - " << points_arr[2].y << "|\n";
+            cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
+            cout << "\n";
+        }
+        else if (arr[i].get_type() == TRIANGLE) {
+            cout << "  |Тип: " << "TRIANGLE" << "|\n";
+            cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
+            cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
+            cout << "  |Третья точка: " << "X - " << points_arr[2].x << " Y - " << points_arr[2].y << "|\n";
+            cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
+            cout << "\n";
+        }
+        else if (arr[i].get_type() == RECTANGLE) {
+            cout << "  |Тип: " << "RECTANGLE" << "|\n";
+            cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
+            cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
+            cout << "  |Третья точка: " << "X - " << points_arr[2].x << " Y - " << points_arr[2].y << "|\n";
+            cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
+            cout << "\n";
+        }
     }
     cout << endl;
     cout << "Для продолжения нажмите любую кнопку ";
@@ -29,21 +54,21 @@ void print_arr(FigureContainer& arr) {
 }
 
 int input_index(int size) {
-    int index = -1;
-    while (true) {
-        cout << "Введите индекс или -1, если хотите выйти: ";
-        if (!(cin >> index) || index < -1 || index >= size) {
-            cin.clear();
-            while (cin.get() != '\n') continue;
-            cout << "Неверный индекс или ввод!" << endl;
-            continue;
-        }
+    bool flag = true;
+    int index = 0;
+    while (flag) {
+        cout << "Введите индекс или -1, если хотите выйти: " << endl;
+        cin >> index;
         if (index == -1) {
             cout << "Выход из программы." << endl;
-            break;
+            return -1;
         }
-        index--;
-        break;
+        if (cin.fail() || index < 0 || index >= size + 1) {
+            cin.clear();
+            system("cls");
+            cout << "Неверный индекс или ввод!" << endl;
+        }
+        else { flag = false;}
     }
     return index;
 }
@@ -79,7 +104,7 @@ void add_item(FigureContainer& arr) {
             cin >> x2 >> y2;
             item = Figure(arr_enum[choose], Point(x1, y1), Point(x2, y2));
         }else if (choose == 1) {
-            double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3, y3;
+            double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
             cout << "Выбранный тип TRIANGLE" << endl;
             cout << "Введите координаты первой точки через пробел(x y): ";
             cin >> x1 >> y1;
@@ -101,8 +126,9 @@ void add_item(FigureContainer& arr) {
     }
 }
 
-
 void delete_item(FigureContainer& arr) {
+    system("cls");
+    if (arr.get_size() == 0) { return; }
     int index = input_index(arr.get_size());
     if (index != -1) {
         arr.remove(index);
@@ -113,7 +139,33 @@ void find_min_square(FigureContainer& arr) {
     system("cls");
     int index = min_square(arr);
     cout << "Фигура с минимальной площадью: " << endl;
-    cout << arr[index];
+    arr[index].calc_framing_rectangle();
+    Point* points_arr = arr[index].get_points_framing_rectangle();
+    if (arr[index].get_type() == CIRCLE) {
+        cout << "  |Тип: " << "CIRCLE" << "|\n";
+        cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
+        cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
+        cout << "  |Третья точка: " << "X - " << points_arr[2].x << " Y - " << points_arr[2].y << "|\n";
+        cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
+        cout << "\n";
+    }
+    else if (arr[index].get_type() == TRIANGLE) {
+        cout << "  |Тип: " << "TRIANGLE" << "|\n";
+        cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
+        cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
+        cout << "  |Третья точка: " << "X - " << points_arr[2].x << " Y - " << points_arr[2].y << "|\n";
+        cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
+        cout << "\n";
+    }
+    else if (arr[index].get_type() == RECTANGLE) {
+        cout << "  |Тип: " << "RECTANGLE" << "|\n";
+        cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
+        cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
+        cout << "  |Третья точка: " << "X - " << points_arr[2].x << " Y - " << points_arr[2].y << "|\n";
+        cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
+        cout << "\n";
+    }
+    cout << endl;
     get_key();
 }
 
@@ -168,17 +220,17 @@ void change_figure(FigureContainer& arr) {
             cin >> x2 >> y2;
             item = Figure(arr_enum[choose], Point(x1, y1), Point(x2, y2));
         }
+        arr.remove(index);
         arr.insert(index, item);
     }
 }
 
-
 int menu1() {
-    cout << "1)" << "Добавить последовательность в массив по индексу" << endl;
-    cout << "2)" << "Удалить последовательность из массива по индексу" << endl;
-    cout << "3)" << "Вывести последовательности на экран" << endl;
-    cout << "4)" << "Вывести последовательность с минимальным n-ым членом" << endl;
-    cout << "5)" << "Заменить последовательность из массива по индексу" << endl;
+    cout << "1)" << "Добавить фигуру в массив по индексу" << endl;
+    cout << "2)" << "Удалить фигуру из массива по индексу" << endl;
+    cout << "3)" << "Вывести кординаты фигуры на экран" << endl;
+    cout << "4)" << "Вывести фигурe с минимальной площадью" << endl;
+    cout << "5)" << "Заменить фигуру в массиве по индексу" << endl;
     cout << "6)" << "Выйти" << endl;
 
     while (true) {
@@ -186,7 +238,6 @@ int menu1() {
         if ((key == 49) || (key == 50) || (key == 51) || (key == 52) || (key == 53) || (key == 54)) return key;
     }
 }
-
 
 int main() {
     setlocale(LC_ALL, "Russian");

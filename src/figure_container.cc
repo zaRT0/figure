@@ -10,7 +10,7 @@ FigureContainer::~FigureContainer() {
     delete[] square_array;
 }
 
-FigureContainer::FigureContainer(const FigureContainer& arr) {
+FigureContainer::FigureContainer(const FigureContainer& arr) {//конструктор копирования
     user_size = arr.user_size;
     square_array = new Figure * [user_size];
     for (int i = 0; i < user_size; i++) {
@@ -18,7 +18,7 @@ FigureContainer::FigureContainer(const FigureContainer& arr) {
     }
 }
 
-FigureContainer::FigureContainer(int size) {
+FigureContainer::FigureContainer(int size) {//принимает кол-во элементов, которые должны быть в динамическом массиве
     if (size < 0) throw std::invalid_argument("Size of array should be positive");
     user_size = size;
     square_array = new Figure * [size];
@@ -27,7 +27,7 @@ FigureContainer::FigureContainer(int size) {
     }
 }
 
-Figure& FigureContainer::operator[](int index) {
+Figure& FigureContainer::operator[](int index) {//метод квадратные скобки возвращает объект по ссылке/индексу
     if (index < 0 || index >= user_size) { throw out_of_range("Index out of range."); }
     return *(square_array[index]);
 }
@@ -41,11 +41,10 @@ Figure FigureContainer::operator[](int index) const {
 }
 
 
-FigureContainer& ::FigureContainer::operator=(FigureContainer arr) {
+FigureContainer& ::FigureContainer::operator=(FigureContainer arr) {//перегрузка оператора присваивания
     this->swap(arr);
     return *this;
 }
-
 
 void FigureContainer::swap(FigureContainer& arr) {
     std::swap(user_size, arr.user_size);
@@ -81,7 +80,6 @@ void FigureContainer::remove(int index) {
     if (index < 0 || index >= user_size) {
         throw out_of_range("Invalid index.");
     }
-
     delete square_array[index];
     square_array[index] = nullptr;
 

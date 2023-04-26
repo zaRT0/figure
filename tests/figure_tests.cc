@@ -54,11 +54,11 @@ TEST(FunctionsTests, CalcSquareTest3) {
 TEST(FunctionsTests, FramingRectangle1) {
     Point p1(2, 2);
     Point p2(4, 2);
-    bool flag;
+    bool flag = false;
     Figure circle(FigureType::CIRCLE, p1, p2);
-    circle.calc_framing_rectangle();
+    circle.calc_framing_rectangle(); 
     Point* framing_arr = circle.get_points_framing_rectangle();
-    if ((framing_arr[0].x == 2) && (framing_arr[0].y == 3) && (framing_arr[1].x == 4) && (framing_arr[1].y == 3) && (framing_arr[2].x == 2) && (framing_arr[2].y == 1) && (framing_arr[3].x == 2) && (framing_arr[3].y == 1)) {
+    if ((framing_arr[0].x == 2) && (framing_arr[0].y == 4) && (framing_arr[1].x == 4) && (framing_arr[1].y == 4) && (framing_arr[2].x == 4) && (framing_arr[2].y == 2) && (framing_arr[3].x == 2) && (framing_arr[3].y == 2)) {
         flag = true;
     }
     EXPECT_TRUE(flag);

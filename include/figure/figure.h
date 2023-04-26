@@ -30,33 +30,28 @@ namespace Figures {//Создаем пространство имен для удобства, в котором определяе
 		Figure(FigureType type, Point p1, Point p2);
 		Figure(FigureType type, Point p1, Point p2, Point p3);
 		FigureType get_type() const;// метод для получения типа фигуры (геттер)
-		Point* get_points_framing_rectangle();
-		Point* get_points();
-		void set_points(const Figure& elem, double x1, double y1, double x2, double y2);
-		void set_points(const Figure& elem, double x1, double y1, double x2, double y2, double x3, double y3);
+		Point* get_points_framing_rectangle();//функция возвращает ссылку на массив точек
 		double calc_perimetr();//данные определяются конструкторами, поэтому ничего не передаем (передаем значение извне)
 		double calc_square();
 		void calc_framing_rectangle();
-		friend std::ostream& operator<<(std::ostream& out, Figure& figure);
-
+		friend std::ostream& operator<<(std::ostream& out, Figure& figure);//перегрузка оператора вывода, принимает на вход поток вывода и элемент класса фигур.
 	};
-
 	class FigureContainer {//класс фигурконтейнер, в котором определяем методы по общему заданию
 	private:
-		Figure** square_array;//массив объектов класса фигур, в который положим значения площадей прямоугольников
+		Figure** square_array;//массив указателей, содержащий указатели
 		int user_size;//пользовательский размер
 	public:
-		~FigureContainer();
+		~FigureContainer();//деструткор для очищения памяти под массив указателей
 		FigureContainer(int size);
-		FigureContainer(const FigureContainer& arr);
-		FigureContainer() : user_size(0), square_array(nullptr) {};
+		FigureContainer(const FigureContainer& arr);//конструктор копирования
+		FigureContainer() : user_size(0), square_array(nullptr) {};//конструктор по умолчанию. для определения
 		int get_size() const;//метод для получения пользовательского размера массива
 		void remove(int index);//метод для удаления значения по указанному индексу
 		void insert(int index, Figure& s);//метод для добавления значения в массив по указанному индексу
-		void swap(FigureContainer& arr);
-		Figure operator[](int index) const;
+		void swap(FigureContainer& arr);//функция для конструктора копирования. 
+		Figure operator[](int index) const;//перегрузка оператора квадратные скобки
 		Figure& operator[](int index);
-		FigureContainer& operator=(FigureContainer arr);
+		FigureContainer& operator=(FigureContainer arr);//перегрузка оператоа равно
 	};
 
 	int min_square(const FigureContainer& figures);//функция для поиска мин площади в массиве(передаем массив по ссылке)
