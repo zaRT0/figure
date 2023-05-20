@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <memory>
+#include <vector>
 namespace Figures {//Создаем пространство имен для удобства, в котором определяем все классы и сопутствующие им структуры (все типы данных)
 	struct Point {//структура поинт для описания точек на плоскости
 		double x;
@@ -14,45 +16,73 @@ namespace Figures {//Создаем пространство имен для удобства, в котором определяе
 		}
 	};
 
-	enum FigureType {//тип перечисления для типов фигур
-		CIRCLE,
-		TRIANGLE,
-		RECTANGLE
+	class Figure;
+	using FigurePtr = std::shared_ptr<Figure>;
+
+	class Figure {
+	public:
+		virtual ~Figure() = default;
+		virtual double calc_perimetr() = 0;
+		virtual double calc_square() = 0;
+		virtual void calc_framing_rectangle() = 0;
+		virtual FigurePtr clone_object() = 0;
+	protected:
+		Figure() = default;
+		Figure(const Figure&) = default;
+		Figure& operator=(const Figure&) = default;
 	};
 
-	class Figure {//создаем класс фигур(эквивалентый Item), в котором определяем методы по основному заданию
-		FigureType type; //переменная type для определения типа фигуры
-		Point points[4];//массив стурктур для точек
+	class Circle : public Figure {
+	private:
+		Point points[2];
 		Point points_framing_rectangle[4];
 	public:
-		Figure();//конструктор по умолчанию
-		//создаем конструкторы для каждого типа фигуры
-		Figure(FigureType type, Point p1, Point p2);
-		Figure(FigureType type, Point p1, Point p2, Point p3);
-		FigureType get_type() const;// метод для получения типа фигуры (геттер)
-		Point* get_points_framing_rectangle();//функция возвращает ссылку на массив точек
-		double calc_perimetr();//данные определяются конструкторами, поэтому ничего не передаем (передаем значение извне)
-		double calc_square();
-		void calc_framing_rectangle();
-		friend std::ostream& operator<<(std::ostream& out, Figure& figure);//перегрузка оператора вывода, принимает на вход поток вывода и элемент класса фигур.
-	};
-	class FigureContainer {//класс фигурконтейнер, в котором определяем методы по общему заданию
-	private:
-		Figure** square_array;//массив указателей, содержащий указатели
-		int user_size;//пользовательский размер
-	public:
-		~FigureContainer();//деструткор для очищения памяти под массив указателей
-		FigureContainer(int size);
-		FigureContainer(const FigureContainer& arr);//конструктор копирования
-		FigureContainer() : user_size(0), square_array(nullptr) {};//конструктор по умолчанию. для определения
-		int get_size() const;//метод для получения пользовательского размера массива
-		void remove(int index);//метод для удаления значения по указанному индексу
-		void insert(int index, Figure& s);//метод для добавления значения в массив по указанному индексу
-		void swap(FigureContainer& arr);//функция для конструктора копирования. 
-		Figure operator[](int index) const;//перегрузка оператора квадратные скобки
-		Figure& operator[](int index);
-		FigureContainer& operator=(FigureContainer arr);//перегрузка оператоа равно
+		Circle(Point p1, Point p2);
+		Point* get_points_framing_rectangle();
+		double calc_perimetr () override;
+		double calc_square() override;
+		void calc_framing_rectangle() override;
+		FigurePtr clone_object() override;
 	};
 
-	int min_square(const FigureContainer& figures);//функция для поиска мин площади в массиве(передаем массив по ссылке)
+	class Triangle : public Figure {
+	private:
+		Point points[3];
+		Point points_framing_rectangle[4];
+	public:
+		Triangle(Point p1, Point p2, Point p3);
+		Point* get_points_framing_rectangle() ;
+		double calc_perimetr() override;
+		double calc_square() override;
+		void calc_framing_rectangle() override;
+		FigurePtr clone_object() override;
+	};
+
+	class Rectangle : public Figure {
+	private:
+		Point points[4];
+		Point points_framing_rectangle[4];
+	public:
+		Rectangle(Point p1, Point p2);
+		Point* get_points_framing_rectangle() ;
+		double calc_perimetr() override;
+		double calc_square() override;
+		void calc_framing_rectangle() override;
+		FigurePtr clone_object() override;
+	};
+
+	class FigureContainer {
+	private:
+		std::vector<FigurePtr> square_array;
+	public:
+		FigureContainer() = default;
+		FigureContainer(const FigureContainer& arr);
+		int size() const;
+		void remove(int index);
+		void insert(FigurePtr s);
+		void swap(FigureContainer& arr);
+		FigurePtr operator[](int index) const;
+		FigureContainer& operator=(FigureContainer& arr);
+	};
+	int min_square(const FigureContainer& figures);
 }

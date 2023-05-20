@@ -15,15 +15,19 @@ int get_key() {
 
 void print_arr(FigureContainer& arr) {
     system("cls");
-    if (arr.get_size() == 0) {
+    if (arr.size() == 0) {
         cout << "Массив объектов пуст" << endl;
         return;
     }
-    for (int i = 0; i < arr.get_size(); ++i) {
+    for (int i = 0; i < arr.size(); ++i) {
         cout << "[" << i << "]" << endl;
-        arr[i].calc_framing_rectangle();
-        Point* points_arr = arr[i].get_points_framing_rectangle();
-        if (arr[i].get_type() == CIRCLE) {
+        auto elem = arr[i];
+        auto circle_elem = dynamic_cast<Circle*>(elem.get());
+        auto triangle_elem = dynamic_cast<Triangle*>(elem.get());
+        auto rectangle_elem = dynamic_cast<Rectangle*>(elem.get());
+        if (circle_elem != nullptr) {
+            circle_elem->calc_framing_rectangle();
+            Point* points_arr = circle_elem->get_points_framing_rectangle();
             cout << "  |Тип: " << "CIRCLE" << "|\n";
             cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
             cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
@@ -31,7 +35,9 @@ void print_arr(FigureContainer& arr) {
             cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
             cout << "\n";
         }
-        else if (arr[i].get_type() == TRIANGLE) {
+        else if (triangle_elem != nullptr) {
+            triangle_elem->calc_framing_rectangle();
+            Point* points_arr = triangle_elem->get_points_framing_rectangle();
             cout << "  |Тип: " << "TRIANGLE" << "|\n";
             cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
             cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
@@ -39,7 +45,9 @@ void print_arr(FigureContainer& arr) {
             cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
             cout << "\n";
         }
-        else if (arr[i].get_type() == RECTANGLE) {
+        else if (rectangle_elem != nullptr) {
+            rectangle_elem->calc_framing_rectangle();
+            Point* points_arr = rectangle_elem->get_points_framing_rectangle();
             cout << "  |Тип: " << "RECTANGLE" << "|\n";
             cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
             cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
@@ -68,17 +76,16 @@ int input_index(int size) {
             system("cls");
             cout << "Неверный индекс или ввод!" << endl;
         }
-        else { flag = false;}
+        else { flag = false; }
     }
     return index;
 }
 
 void add_item(FigureContainer& arr) {
     system("cls");
-    int index = input_index(arr.get_size());
+    int index = input_index(arr.size());
     if (index != -1) {
         string figure_types[] = { "CIRCLE", "TRIANGLE", "RECTANGLE" };
-        FigureType arr_enum[] = { CIRCLE, TRIANGLE, RECTANGLE };
         int choose = 0;
         int flag = true;
         system("cls");
@@ -94,7 +101,6 @@ void add_item(FigureContainer& arr) {
             else { cout << "Введено неправильное число, попробуйте ещё раз" << endl; }
         }
         system("cls");
-        Figure item;
         if (choose == 0) {
             double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
             cout << "Выбранный тип CIRCLE" << endl;
@@ -102,8 +108,9 @@ void add_item(FigureContainer& arr) {
             cin >> x1 >> y1;
             cout << "Введите координаты второй точки через пробел(x y): ";
             cin >> x2 >> y2;
-            item = Figure(arr_enum[choose], Point(x1, y1), Point(x2, y2));
-        }else if (choose == 1) {
+            arr.insert(make_shared<Circle>(Point(x1, y1), Point(x2, y2)));
+        }
+        else if (choose == 1) {
             double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
             cout << "Выбранный тип TRIANGLE" << endl;
             cout << "Введите координаты первой точки через пробел(x y): ";
@@ -112,36 +119,38 @@ void add_item(FigureContainer& arr) {
             cin >> x2 >> y2;
             cout << "Введите координаты третьей точки через пробел(x y): ";
             cin >> x3 >> y3;
-            item = Figure(arr_enum[choose], Point(x1, y1), Point(x2, y2), Point(x3, y3));
-        }else{
+            arr.insert(make_shared<Triangle>(Point(x1, y1), Point(x2, y2), Point(x3, y3)));
+        }
+        else {
             double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
             cout << "Выбранный тип RECTANGLE" << endl;
             cout << "Введите координаты первой точки через пробел(x y): ";
             cin >> x1 >> y1;
             cout << "Введите координаты второй точки через пробел(x y): ";
             cin >> x2 >> y2;
-            item = Figure(arr_enum[choose], Point(x1, y1), Point(x2, y2));
+            arr.insert(make_shared<Rectangle>(Point(x1, y1), Point(x2, y2)));
         }
-         arr.insert(index, item);
     }
 }
 
 void delete_item(FigureContainer& arr) {
     system("cls");
-    if (arr.get_size() == 0) { return; }
-    int index = input_index(arr.get_size());
-    if (index != -1) {
-        arr.remove(index);
-    }
+    if (arr.size() == 0) { return; }
+    int index = input_index(arr.size());
+    if (index != -1) { arr.remove(index); }
 }
 
 void find_min_square(FigureContainer& arr) {
     system("cls");
     int index = min_square(arr);
     cout << "Фигура с минимальной площадью: " << endl;
-    arr[index].calc_framing_rectangle();
-    Point* points_arr = arr[index].get_points_framing_rectangle();
-    if (arr[index].get_type() == CIRCLE) {
+    auto elem = arr[index];
+    auto circle_elem = dynamic_cast<Circle*>(elem.get());
+    auto triangle_elem = dynamic_cast<Triangle*>(elem.get());
+    auto rectangle_elem = dynamic_cast<Rectangle*>(elem.get());
+    if (circle_elem != nullptr) {
+        circle_elem->calc_framing_rectangle();
+        Point* points_arr = circle_elem->get_points_framing_rectangle();
         cout << "  |Тип: " << "CIRCLE" << "|\n";
         cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
         cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
@@ -149,7 +158,9 @@ void find_min_square(FigureContainer& arr) {
         cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
         cout << "\n";
     }
-    else if (arr[index].get_type() == TRIANGLE) {
+    else if (triangle_elem != nullptr) {
+        triangle_elem->calc_framing_rectangle();
+        Point* points_arr = triangle_elem->get_points_framing_rectangle();
         cout << "  |Тип: " << "TRIANGLE" << "|\n";
         cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
         cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
@@ -157,7 +168,9 @@ void find_min_square(FigureContainer& arr) {
         cout << "  |Четвёртая точка: " << "X - " << points_arr[3].x << " Y - " << points_arr[3].y << "|\n";
         cout << "\n";
     }
-    else if (arr[index].get_type() == RECTANGLE) {
+    else if (rectangle_elem != nullptr) {
+        rectangle_elem->calc_framing_rectangle();
+        Point* points_arr = rectangle_elem->get_points_framing_rectangle();
         cout << "  |Тип: " << "RECTANGLE" << "|\n";
         cout << "  |Первая точка: " << "X - " << points_arr[0].x << " Y - " << points_arr[0].y << "|\n";
         cout << "  |Вторая точка: " << "X - " << points_arr[1].x << " Y - " << points_arr[1].y << "|\n";
@@ -171,10 +184,10 @@ void find_min_square(FigureContainer& arr) {
 
 void change_figure(FigureContainer& arr) {
     system("cls");
-    int index = input_index(arr.get_size());
+    int index = input_index(arr.size());
+    arr.remove(index);
     if (index != -1) {
         string figure_types[] = { "CIRCLE", "TRIANGLE", "RECTANGLE" };
-        FigureType arr_enum[] = { CIRCLE, TRIANGLE, RECTANGLE };
         int choose = 0;
         int flag = true;
         system("cls");
@@ -190,7 +203,6 @@ void change_figure(FigureContainer& arr) {
             else { cout << "Введено неправильное число, попробуйте ещё раз" << endl; }
         }
         system("cls");
-        Figure item;
         if (choose == 0) {
             double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
             cout << "Выбранный тип CIRCLE" << endl;
@@ -198,10 +210,10 @@ void change_figure(FigureContainer& arr) {
             cin >> x1 >> y1;
             cout << "Введите координаты второй точки через пробел(x y): ";
             cin >> x2 >> y2;
-            item = Figure(arr_enum[choose], Point(x1, y1), Point(x2, y2));
+            arr.insert(make_shared<Circle>(Point(x1, y1), Point(x2, y2)));
         }
         else if (choose == 1) {
-            double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3, y3;
+            double x1 = 0, y1 = 0, x2 = 0, y2 = 0, x3 = 0, y3 = 0;
             cout << "Выбранный тип TRIANGLE" << endl;
             cout << "Введите координаты первой точки через пробел(x y): ";
             cin >> x1 >> y1;
@@ -209,7 +221,7 @@ void change_figure(FigureContainer& arr) {
             cin >> x2 >> y2;
             cout << "Введите координаты третьей точки через пробел(x y): ";
             cin >> x3 >> y3;
-            item = Figure(arr_enum[choose], Point(x1, y1), Point(x2, y2), Point(x3, y3));
+            arr.insert(make_shared<Triangle>(Point(x1, y1), Point(x2, y2), Point(x3, y3)));
         }
         else {
             double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
@@ -218,10 +230,8 @@ void change_figure(FigureContainer& arr) {
             cin >> x1 >> y1;
             cout << "Введите координаты второй точки через пробел(x y): ";
             cin >> x2 >> y2;
-            item = Figure(arr_enum[choose], Point(x1, y1), Point(x2, y2));
+            arr.insert(make_shared<Rectangle>(Point(x1, y1), Point(x2, y2)));
         }
-        arr.remove(index);
-        arr.insert(index, item);
     }
 }
 
